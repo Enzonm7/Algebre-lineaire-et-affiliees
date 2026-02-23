@@ -1,12 +1,19 @@
+"""Classe représentant un vecteur en dimension finie."""
+
 class Vecteur:
     
     def __init__(self, coordonnees):
+        """Constructeur qui place dans l'attribut coordonnees le tuple 
+        contenant les valeurs de <coordonnees>"""
         self.coordonnees = tuple(coordonnees)
     
     def __str__(self):
+        """Convertit <self> en une chaîne de caractères pour l'affichage 
+        pour un utilisateur humain."""
         return str(self.coordonnees)
     
     def __repr__(self):
+        """Représentation en colonne du vecteur."""
         col = ""
         for coord in self.coordonnees:
             col += str(coord) + "\n"
@@ -14,12 +21,15 @@ class Vecteur:
         return f"[\n{col}\n]"
     
     def dimension(self):
+        """Fournit le nombre de coordonnées du vecteur <self>."""
         return len(self.coordonnees)
 
     def __getitem__(self, key):
+        """Retourne la composante d'indice <key> dans le vecteur <self>."""
         return self.coordonnees[key]
         
     def __add__(self, other):
+        """Retourne la somme de <self> et <other>."""
         v = []
         for i in range(0, self.dimension()):
             add = self[i] + other[i]
@@ -27,12 +37,14 @@ class Vecteur:
         return Vecteur(v)
     
     def multvec(self, other):
+        """Retourne le produit coordonnée par coordonnée de <self> et <other>."""
         v =  []
         for i in range(0, self.dimension()):
             v.append(self[i] * other[i])
         return Vecteur(v)
     
     def __mul__(self, coefficient):
+        """Retourne <coefficient> fois le vecteur <self>."""
         v = []
         for c in self.coordonnees:
             mult = c * coefficient
@@ -40,6 +52,7 @@ class Vecteur:
         return Vecteur(v) 
     
     def __matmul__(self, other):
+        """Retourne le produit scalaire de <self> et de <other>."""
         valeur = 0
         for i in range(0, self.dimension()):
             scalaire = self[i] * other[i]
@@ -47,17 +60,20 @@ class Vecteur:
         return valeur   
     
     def norme_carre(self):
+        """Retourne le carré de la norme de <self>."""
         valeur = 0
         for elt in self.coordonnees:
             carre = elt * elt
             valeur += carre
         return valeur
-        # return self @ self
         
     def norme(self):
+        """Retourne la norme de <self>."""
         return self.norme_carre() ** 0.5     
         
     def normaliser(self):
+        """Retourne un vecteur ayant même direction et même sens que <self> 
+        mais dont la norme vaut 1."""
         v = []
         n = self.norme()
         for c in self.coordonnees:
