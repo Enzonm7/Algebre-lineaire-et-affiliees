@@ -10,8 +10,7 @@ class Matrice:
                 raise ValueError("Les lignes sont de longueurs différentes!")
         self.data = []
         for ligne in data:
-            self.data.append(list(ligne))
-            
+            self.data.append(list(ligne))            
     
     def __str__(self):
         m = ""
@@ -40,8 +39,7 @@ class Matrice:
             for j in range(self.nb_colonnes()):
                 ligne.append(self.data[i][j] + other.data[i][j])
             res.append(ligne)
-        return Matrice(res)
-    
+        return Matrice(res)    
     
     def __sub__(self, other):
         res = []
@@ -52,8 +50,7 @@ class Matrice:
             for j in range(self.nb_colonnes()):
                 ligne.append(self.data[i][j] - other.data[i][j])
             res.append(ligne)
-        return Matrice(res)    
-    
+        return Matrice(res)   
     
     def __mul__(self, coefficient):
         res = []
@@ -62,8 +59,7 @@ class Matrice:
             for j in range(self.nb_colonnes()):
                 ligne.append(self.data[i][j] * coefficient)
             res.append(ligne)
-        return Matrice(res)
-            
+        return Matrice(res)       
     
     def __matmul__(self, other):
         res = []
@@ -79,7 +75,6 @@ class Matrice:
             res.append(ligne)
         return Matrice(res)
     
-    
     def transposee(self):
         res = []
         for j in range(self.nb_colonnes()):
@@ -89,13 +84,84 @@ class Matrice:
             res.append(ligne)
         return Matrice(res)
     
+    def sous_matrice(self, j):
+        res = []
+        for i in range(1, self.nb_lignes()):
+            ligne = []
+            for k in range(self.nb_colonnes()):
+                if k != j:
+                    ligne.append(self.data[i][k])
+            res.append(ligne)
+        return Matrice(res)            
+                
+    def determinant(self):
+        if self.nb_lignes() != self.nb_colonnes():
+            raise ValueError("La matrice n'est pas carrée")
+        if self.nb_lignes() == 1:
+            return self.data[0][0]
+        det = 0
+        for j in range(self.nb_colonnes()):
+            signe = +1 if j%2 == 0 else -1
+            sous_mat = self.sous_matrice(j)
+            det += signe * self.data[0][j] * sous_mat.determinant()
+        return det
     
+    def identite(n):
+        res = []
+        for i in range(n):
+            ligne = []
+            for j in range(n):
+                if i == j:
+                    ligne.append(1)
+                else:
+                    ligne.append(0)
+            res.append(ligne)
+        return Matrice(res)
+    
+    def concat_horizontale(self, other):
+        res = []
+        if self.nb_lignes() != other.nb_lignes():
+            raise ValueError("Les matrices self et other doivent avoir le même nombre de lignes")
+        for i in range(self.nb_lignes()):
+            ligne = self.data[i] + other.data[i]
+            res.append(ligne)
+        return Matrice(res)
+            
+    def normaliser_ligne(self, aug, j, n):
+        pivot = aug.data[j][j]
+        for k in range(2*n):
+            aug.data[j][k] /= pivot
+
+    def eliminer_colonne(self, aug, j, n):
+        for i in range(n):
+            if i != j:
+                facteur = aug.data[i][j]
+                for k in range(2*n):
+                    aug.data[i][k] -= facteur * aug.data[j][k]
+    
+    def inverse(self):
+        res = []
+        if self.nb_lignes() != self.nb_colonnes():
+            raise ValueError("La matrice n'est pas carrée")
+        if self.determinant() == 0:
+            raise ValueError("La matrice n'est pas inversible")
+        n = self.nb_lignes()
+        aug = self.concat_horizontale(Matrice.identite(n))
+        for j in range(n):
+            self.normaliser_ligne(aug, j, n)
+            self.eliminer_colonne(aug, j, n)
+        for i in range(n):         
+            res.append(aug.data[i][n:])
+        return Matrice(res)        
+                
+                
 if __name__ == "__main__":
     m1 = Matrice([[1,2,3], [4,5,6], [7,8,9]])
     m2 = Matrice([[1,0], [0,1]])
     m3 = Matrice([[1,2], [4,5], [3,7]])   
     m4 = Matrice([[2,6], [5,3], [4,1]]) 
     m5 = Matrice([[5,6], [9,7], [8,3]]) 
+    m6 = Matrice([[1,2], [3,4]])
     print(m1)
     print(repr(m2))
     print(repr(m3))
@@ -106,4 +172,10 @@ if __name__ == "__main__":
     print(f"Produit d'une matrice avec un scalaire:\n{m1 * 3}")
     print(f"Produit matricielle:\n{m1 @ m3}")
     print(f"La transposée de ma matrice:\n{m5.transposee()}")
+    print(f"Ma sous-matrice:\n{m1.sous_matrice(0)}")
+    print(f"Les déterminants de mes matrices: {m6.determinant()} et {m1.determinant()}")
+    print(f"Matrice identité de taille n: {Matrice.identite(4)}")
+    print(f"Matrice identité de taille n:\n{m3.concat_horizontale(m4)}")
+    print(f"L'inverse de ma matrice:\n{m6.inverse()}")
+    print(f"Ma matrice identité:\n{m6 @ m6.inverse()}")
     
