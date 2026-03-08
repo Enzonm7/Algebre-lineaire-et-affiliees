@@ -1,6 +1,10 @@
+"""Classe représentant une matrice à coefficients réels."""
+
 class Matrice:
     
     def __init__(self, data):
+        """Constructeur qui place dans l'attribut data une copie de <data>.
+        <data> doit être une liste de listes non vide, toutes de même longueur."""
         if data == []:
             raise ValueError("Matrice vide non autorisée !")
         for i in range(len(data)):
@@ -13,6 +17,8 @@ class Matrice:
             self.data.append(list(ligne))            
     
     def __str__(self):
+        """Convertit <self> en une chaîne de caractères pour l'affichage
+        pour un utilisateur humain."""
         m = ""
         for i in range(len(self.data)):
             if i == 0:
@@ -22,15 +28,19 @@ class Matrice:
         return m
             
     def __repr__(self):
+        """Représentation formelle de <self> permettant de recréer l'objet."""
         return "Matrice(" + str(self.data) + ")"
     
     def nb_lignes(self):
+        """Fournit le nombre de lignes de la matrice <self>."""
         return len(self.data)
     
     def nb_colonnes(self):
+        """Fournit le nombre de colonnes de la matrice <self>."""
         return len(self.data[0])
     
     def __add__(self, other):
+        """Retourne la somme de <self> et <other>."""
         res = []
         if self.nb_lignes() != other.nb_lignes() or self.nb_colonnes() != other.nb_colonnes():
             raise ValueError("Matrices de dimensions différentes!")
@@ -42,6 +52,7 @@ class Matrice:
         return Matrice(res)    
     
     def __sub__(self, other):
+        """Retourne la différence de <self> et <other>."""
         res = []
         if self.nb_lignes() != other.nb_lignes() or self.nb_colonnes() != other.nb_colonnes():
             raise ValueError("Matrices de dimensions différentes!")
@@ -53,6 +64,7 @@ class Matrice:
         return Matrice(res)   
     
     def __mul__(self, coefficient):
+        """Retourne <coefficient> fois la matrice <self>."""
         res = []
         for i in range(self.nb_lignes()):
             ligne = []
@@ -62,6 +74,7 @@ class Matrice:
         return Matrice(res)       
     
     def __matmul__(self, other):
+        """Retourne le produit matriciel de <self> et <other>."""
         res = []
         if self.nb_colonnes() != other.nb_lignes():
             raise ValueError("Le nombre de colonnes de self doit être égal au nombre de ligne de other")
@@ -76,6 +89,7 @@ class Matrice:
         return Matrice(res)
     
     def transposee(self):
+        """Retourne la transposée de <self> : Une matrice m×n donne une matrice n×m."""
         res = []
         for j in range(self.nb_colonnes()):
             ligne = []
@@ -85,6 +99,8 @@ class Matrice:
         return Matrice(res)
     
     def sous_matrice(self, j):
+        """Retourne la sous-matrice de <self> obtenue en supprimant
+        la ligne 0 et la colonne <j>."""
         res = []
         for i in range(1, self.nb_lignes()):
             ligne = []
@@ -95,6 +111,7 @@ class Matrice:
         return Matrice(res)            
                 
     def determinant(self):
+        """Retourne le déterminant de <self>."""
         if self.nb_lignes() != self.nb_colonnes():
             raise ValueError("La matrice n'est pas carrée")
         if self.nb_lignes() == 1:
@@ -107,6 +124,7 @@ class Matrice:
         return det
     
     def identite(n):
+        """Retourne la matrice identité de taille n×n"""
         res = []
         for i in range(n):
             ligne = []
@@ -119,6 +137,7 @@ class Matrice:
         return Matrice(res)
     
     def concat_horizontale(self, other):
+        """Retourne la matrice obtenue en accolant <other> à droite de <self>."""
         res = []
         if self.nb_lignes() != other.nb_lignes():
             raise ValueError("Les matrices self et other doivent avoir le même nombre de lignes")
@@ -128,11 +147,15 @@ class Matrice:
         return Matrice(res)
             
     def normaliser_ligne(self, aug, j, n):
+        """Divise chaque élément de la ligne j de <aug> par le pivot aug.data[j][j]
+        de sorte que aug.data[j][j] vaille 1 après l'opération."""
         pivot = aug.data[j][j]
         for k in range(2*n):
             aug.data[j][k] /= pivot
 
     def eliminer_colonne(self, aug, j, n):
+        """Pour chaque ligne i différente de j, soustrait un multiple de la ligne j
+        à la ligne i de sorte que aug.data[i][j] vaille 0 après l'opération."""
         for i in range(n):
             if i != j:
                 facteur = aug.data[i][j]
@@ -140,6 +163,7 @@ class Matrice:
                     aug.data[i][k] -= facteur * aug.data[j][k]
     
     def inverse(self):
+        """Retourne l'inverse de <self> par la méthode de Gauss-Jordan."""
         res = []
         if self.nb_lignes() != self.nb_colonnes():
             raise ValueError("La matrice n'est pas carrée")
