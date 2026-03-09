@@ -20,9 +20,13 @@ class Vecteur:
         col = col[:-1]
         return f"[\n{col}\n]"
     
-    def dimension(self):
+    def __len__(self):
         """Fournit le nombre de coordonnées du vecteur <self>."""
         return len(self.coordonnees)
+    
+    def __iter__(self):
+        """Rend le vecteur itérable."""
+        return iter(self.coordonnees)
 
     def __getitem__(self, key):
         """Retourne la composante d'indice <key> dans le vecteur <self>."""
@@ -31,7 +35,7 @@ class Vecteur:
     def __add__(self, other):
         """Retourne la somme de <self> et <other>."""
         v = []
-        for i in range(0, self.dimension()):
+        for i in range(0, len(self)):
             add = self[i] + other[i]
             v.append(add)
         return Vecteur(v)
@@ -39,7 +43,7 @@ class Vecteur:
     def multvec(self, other):
         """Retourne le produit coordonnée par coordonnée de <self> et <other>."""
         v =  []
-        for i in range(0, self.dimension()):
+        for i in range(0, len(self)):
             v.append(self[i] * other[i])
         return Vecteur(v)
     
@@ -54,7 +58,7 @@ class Vecteur:
     def __matmul__(self, other):
         """Retourne le produit scalaire de <self> et de <other>."""
         valeur = 0
-        for i in range(0, self.dimension()):
+        for i in range(0, len(self)):
             scalaire = self[i] * other[i]
             valeur += scalaire
         return valeur   
@@ -87,8 +91,8 @@ if __name__ == "__main__":
     v3 = Vecteur([0,3,4])
     print(v1)
     print(v2)
-    print(f"Dimension du Vecteur 1:{v1.dimension()}")
-    print(f"Dimension du Vecteur 2:{v2.dimension()}")
+    print(f"Dimension du Vecteur 1:{len(v1)}")
+    print(f"Dimension du Vecteur 2:{len(v2)}")
     print(f"Affichage en colonne du vecteur:\n{repr(v2)}")
     print(f"v2[0] = {v2[0]}")
     print(f"v2[0] = {v2[1]}")

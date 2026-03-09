@@ -5,16 +5,22 @@ class Matrice:
     def __init__(self, data):
         """Constructeur qui place dans l'attribut data une copie de <data>.
         <data> doit être une liste de listes non vide, toutes de même longueur."""
-        if data == []:
-            raise ValueError("Matrice vide non autorisée !")
-        for i in range(len(data)):
-            if data[i] == []:
-                raise ValueError("Matrice vide non autorisée !")
-            elif len(data[i]) != len(data[0]):
-                raise ValueError("Les lignes sont de longueurs différentes!")
-        self.data = []
+        self.data = data
+        self.verifier_construction()
+        copie = []
         for ligne in data:
-            self.data.append(list(ligne))            
+            copie.append(list(ligne)) 
+        self.data = copie
+            
+    def verifier_construction(self):
+        """Vérifie la validité des coordonnées de la matrice."""
+        if len(self.data) == 0:
+            raise ValueError("Matrice vide non autorisée !")
+        for i in range(len(self.data)):
+            if len(self.data[i]) == 0:
+                raise ValueError("Matrice vide non autorisée !")
+            elif len(self.data[i]) != len(self.data[0]):
+                raise ValueError("Les lignes sont de longueurs différentes!")
     
     def __str__(self):
         """Convertit <self> en une chaîne de caractères pour l'affichage
@@ -198,8 +204,7 @@ if __name__ == "__main__":
     print(f"La transposée de ma matrice:\n{m5.transposee()}")
     print(f"Ma sous-matrice:\n{m1.sous_matrice(0)}")
     print(f"Les déterminants de mes matrices: {m6.determinant()} et {m1.determinant()}")
-    print(f"Matrice identité de taille n: {Matrice.identite(4)}")
+    print(f"Matrice identité de taille n:\n{Matrice.identite(4)}")
     print(f"Matrice identité de taille n:\n{m3.concat_horizontale(m4)}")
     print(f"L'inverse de ma matrice:\n{m6.inverse()}")
     print(f"Ma matrice identité:\n{m6 @ m6.inverse()}")
-    
