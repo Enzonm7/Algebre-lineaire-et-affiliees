@@ -1,18 +1,20 @@
 """Classe représentant une matrice à coefficients réels."""
 
+from vecteur import Vecteur
+
 class Matrice:
     
     def __init__(self, data):
         """Constructeur qui place dans l'attribut data une copie de <data>.
         <data> doit être une liste de listes non vide, toutes de même longueur."""
         self.data = data
-        self.verifier_construction()
+        self.verifier_validite()
         copie = []
         for ligne in data:
             copie.append(list(ligne)) 
         self.data = copie
             
-    def verifier_construction(self):
+    def verifier_validite(self):
         """Vérifie la validité des coordonnées de la matrice."""
         if len(self.data) == 0:
             raise ValueError("Matrice vide non autorisée !")
@@ -186,12 +188,12 @@ class Matrice:
                 
                 
 if __name__ == "__main__":
-    m1 = Matrice([[1,2,3], [4,5,6], [7,8,9]])
-    m2 = Matrice([[1,0], [0,1]])
-    m3 = Matrice([[1,2], [4,5], [3,7]])   
-    m4 = Matrice([[2,6], [5,3], [4,1]]) 
-    m5 = Matrice([[5,6], [9,7], [8,3]]) 
-    m6 = Matrice([[1,2], [3,4]])
+    m1 = Matrice([Vecteur([1,2,3]), Vecteur([4,5,6]), Vecteur([7,8,9])])
+    m2 = Matrice([Vecteur([1,0]), Vecteur([0,1])])
+    m3 = Matrice([Vecteur([1,2]), Vecteur([4,5]), Vecteur([3,7])])
+    m4 = Matrice([Vecteur([2,6]), Vecteur([5,3]), Vecteur([4,1])])
+    m5 = Matrice([Vecteur([5,6]), Vecteur([9,7]), Vecteur([8,3])])
+    m6 = Matrice([Vecteur([1,2]), Vecteur([3,4])])
     print(m1)
     print(repr(m2))
     print(repr(m3))
