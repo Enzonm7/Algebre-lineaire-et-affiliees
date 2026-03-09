@@ -83,18 +83,31 @@ class Matrice:
     
     def __matmul__(self, other):
         """Retourne le produit matriciel de <self> et <other>."""
-        res = []
-        if self.nb_colonnes() != other.nb_lignes():
-            raise ValueError("Le nombre de colonnes de self doit être égal au nombre de ligne de other")
-        for i in range(self.nb_lignes()):
-            ligne = []
-            for j in range(other.nb_colonnes()):
+        # Cas 1 : other est un Vecteur
+        if isinstance(other, Vecteur):
+            if self.nb_colonnes() != len(other):
+                raise ValueError("...")
+            res = []
+            for i in range(self.nb_lignes()):
                 somme = 0
-                for k in range(0, self.nb_colonnes()):
-                    somme += self.data[i][k] * other.data[k][j]
-                ligne.append(somme)
-            res.append(ligne)
-        return Matrice(res)
+                for k in range(self.nb_colonnes()):
+                    somme += self.data[i][k] * other[k]
+                res.append(somme)
+            return Vecteur(res)
+        # Cas 2 : other est une Matrice
+        else:
+            res = []
+            if self.nb_colonnes() != other.nb_lignes():
+                raise ValueError("Le nombre de colonnes de self doit être égal au nombre de ligne de other")
+            for i in range(self.nb_lignes()):
+                ligne = []
+                for j in range(other.nb_colonnes()):
+                    somme = 0
+                    for k in range(0, self.nb_colonnes()):
+                        somme += self.data[i][k] * other.data[k][j]
+                    ligne.append(somme)
+                res.append(ligne)
+            return Matrice(res)
     
     def transposee(self):
         """Retourne la transposée de <self> : Une matrice m×n donne une matrice n×m."""
@@ -188,12 +201,13 @@ class Matrice:
                 
                 
 if __name__ == "__main__":
-    m1 = Matrice([Vecteur([1,2,3]), Vecteur([4,5,6]), Vecteur([7,8,9])])
-    m2 = Matrice([Vecteur([1,0]), Vecteur([0,1])])
-    m3 = Matrice([Vecteur([1,2]), Vecteur([4,5]), Vecteur([3,7])])
-    m4 = Matrice([Vecteur([2,6]), Vecteur([5,3]), Vecteur([4,1])])
-    m5 = Matrice([Vecteur([5,6]), Vecteur([9,7]), Vecteur([8,3])])
-    m6 = Matrice([Vecteur([1,2]), Vecteur([3,4])])
+    m1 = Matrice([[1,2,3], [4,5,6], [7,8,9]])
+    m2 = Matrice([[1,0], [0,1]])
+    m3 = Matrice([[1,2], [4,5], [3,7]])
+    m4 = Matrice([[2,6], [5,3], [4,1]])
+    m5 = Matrice([[5,6], [9,7], [8,3]])
+    m6 = Matrice([[1,2], [3,4]])
+    v = Vecteur([1, 2, 3])
     print(m1)
     print(repr(m2))
     print(repr(m3))
@@ -202,6 +216,7 @@ if __name__ == "__main__":
     print(f"Addition de deux matrices:\n{m3 + m4}")
     print(f"Soustraction de deux matrices:\n{m5 - m4}")
     print(f"Produit d'une matrice avec un scalaire:\n{m1 * 3}")
+    print(f"Produit d'une matrice et d'un vecteur:\n{m1 @ v}")
     print(f"Produit matricielle:\n{m1 @ m3}")
     print(f"La transposée de ma matrice:\n{m5.transposee()}")
     print(f"Ma sous-matrice:\n{m1.sous_matrice(0)}")
