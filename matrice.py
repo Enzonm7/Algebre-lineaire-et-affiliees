@@ -25,8 +25,7 @@ class Matrice:
                 raise ValueError("Les lignes sont de longueurs différentes!")
     
     def __str__(self):
-        """Convertit <self> en une chaîne de caractères pour l'affichage
-        pour un utilisateur humain."""
+        """Convertit <self> en une chaîne de caractères pour l'affichage."""
         m = ""
         for i in range(len(self.data)):
             if i == 0:
