@@ -15,12 +15,12 @@ class ApplicationLineaire:
         """Convertit <self> en une chaîne de caractères pour l'affichage."""
         n = self.matrice.nb_colonnes()
         m = self.matrice.nb_lignes()
-        en_tete = "Application lineaire(R^" + str(n) + " -> R^" + str(m) + ")"
+        en_tete = "Application linéaire(R^" + str(n) + " -> R^" + str(m) + ")"
         return en_tete + "\n" + str(self.matrice)
     
     def __repr__(self):
         """Représentation formelle de <self> permettant de recréer l'objet."""
-        return "Application lineaire(" + str(self.matrice.data) + ")"
+        return "Application linéaire(" + str(self.matrice.data) + ")"
     
     def image(self, vecteur):
         """Retourne l'image de <vecteur> par l'application linéaire."""
@@ -37,8 +37,7 @@ class ApplicationLineaire:
         
     def trouver_pivot(self, tableau, col, ligne_pivot):
         """Retourne l'indice de la première ligne >= ligne_pivot 
-        ayant un coefficient non nul dans la colonne col.
-        Retourne -1 si aucun pivot trouvé."""
+        ayant un coefficient non nul dans la colonne col."""
         for i in range(ligne_pivot, len(tableau)):
             if tableau[i][col] != 0:
                 return i

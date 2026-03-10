@@ -13,12 +13,8 @@ class Vecteur:
         return str(self.coordonnees)
     
     def __repr__(self):
-        """Représentation en colonne du vecteur."""
-        col = ""
-        for coord in self.coordonnees:
-            col += str(coord) + "\n"
-        col = col[:-1]
-        return f"[\n{col}\n]"
+        """Représentation formelle de <self> permettant de recréer l'objet."""
+        return "Vecteur(" + str(list(self.coordonnees)) + ")"
     
     def __len__(self):
         """Fournit le nombre de coordonnées du vecteur <self>."""
