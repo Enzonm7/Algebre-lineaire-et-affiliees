@@ -1,4 +1,4 @@
-
+"""Classe représentant un système linéaire de la forme Ax = b."""
 
 from vecteur import Vecteur
 from matrice import Matrice
@@ -7,7 +7,7 @@ from application_lineaire import ApplicationLineaire
 class SystemeLineaire:
     
     def __init__(self, matrice, vecteur):
-        """..."""
+        """Constructeur qui crée un système linéaire à partir de <matrice> et <vecteur>."""
         if not isinstance(matrice, Matrice):
             raise ValueError("L'argument doit être une instance de Matrice")
         if not isinstance(vecteur, Vecteur):
@@ -18,7 +18,7 @@ class SystemeLineaire:
         self.vecteur = Vecteur(vecteur.coordonnees)
         
     def __str__(self):
-        """..."""
+        """Convertit <self> en une chaîne de caractères pour l'affichage."""
         chaine = ""
         for i in range(self.matrice.nb_lignes()):
             chaine += str(self.matrice.data[i]) + " | " + str(self.vecteur[i])
@@ -27,11 +27,12 @@ class SystemeLineaire:
         return chaine    
     
     def __repr__(self):
-        """..."""
+        """Représentation formelle de <self> permettant de recréer l'objet."""
         return "Systeme linéaire(" + repr(self.matrice) + ", \n" + repr(self.vecteur) + ")"
     
     def construire_tableau(self):
-        """..."""
+        """Retourne la matrice augmentée [A|b] obtenue en accolant <vecteur>
+        comme dernière colonne à <matrice>."""
         tableau = []
         for valeur in self.vecteur:
             tableau.append([valeur])
