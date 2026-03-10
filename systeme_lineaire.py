@@ -47,9 +47,18 @@ class SystemeLineaire:
         return rang_matrice == rang_augmentee
     
     def resoudre(self):
-        """..."""
-        pass
-    
+        """Retourne la solution unique du système si elle existe."""
+        if not self.est_compatible():
+            raise ValueError("Le système n'admet pas de solution")
+        app = ApplicationLineaire(self.construire_tableau())
+        tableau, colonnes_pivot = app.gauss()
+        if len(colonnes_pivot) < self.matrice.nb_colonnes():
+            raise ValueError("Le système admet une infinité de solutions")
+        solution = []
+        for i in range(self.matrice.nb_colonnes()):
+            solution.append(tableau[i][-1])
+        return Vecteur(solution)
+
     
 if __name__ == "__main__":
     m1 = Matrice([[1,2], [3,4], [0,1]])
@@ -61,8 +70,20 @@ if __name__ == "__main__":
     m3 = Matrice([[1, 2], [2, 4]])
     v3 = Vecteur([3, 7])
     sys3 = SystemeLineaire(m3, v3)
+    m4 = Matrice([[1, 2, 3], [2, 4, 6]])
+    v4 = Vecteur([5, 10])
+    sys4 = SystemeLineaire(m4, v4)
     print(sys1)
     print(repr(sys1))
     print(sys1.construire_tableau())
     print(f"sys2 compatible : {sys2.est_compatible()}")
     print(f"sys3 compatible : {sys3.est_compatible()}")
+    print(f"Solution sys2 : {sys2.resoudre()}")
+    try:
+        print(sys3.resoudre())
+    except ValueError as e:
+        print(f"Erreur sys3 : {e}")
+    try:
+        print(sys4.resoudre())
+    except ValueError as e:
+        print(f"Erreur sys4 : {e}")
